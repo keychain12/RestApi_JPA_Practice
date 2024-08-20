@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/")
+    @GetMapping()
     public List<User> getAllUsers() { // 모든 사용자 목록 api
 
         return userService.findAllUsers();
@@ -32,7 +32,7 @@ public class UserController {
         return UserResponse.toResponse(finduser);
     }
 
-    @PostMapping("/")  // 회원 저장 api
+    @PostMapping()  // 회원 저장 api
     public Result createUser(@Valid @RequestBody UserSaveRequest userSaveRequest,
                              BindingResult bindingResult) {
 
