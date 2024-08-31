@@ -16,12 +16,14 @@ BACK-END
 <img src="https://img.shields.io/badge/oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white">
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+<img src="https://img.shields.io/badge/Mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
 </div>
 
 
 - java
 - Spring-Boot
-- JPA
+- Spring Data JPA
+- QueryDSL
 - RestfulApi
 
 FRONT-END
@@ -30,7 +32,6 @@ FRONT-END
 <img src="https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css&logoColor=white"> 
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white">
 <img src="https://img.shields.io/badge/Boot Strap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
-<img src="https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white">
 </div>
 
 <h2>개발 환경</h2>
@@ -45,6 +46,8 @@ FRONT-END
 서버사이드템플릿을 사용하던 개발 방식이 아닌 RestApi서버 구현
 
 JPA를 사용한 도메인 설계
+
+Spring Data JPA , QueryDsl 연습
 
 
 
