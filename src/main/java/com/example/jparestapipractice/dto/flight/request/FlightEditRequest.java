@@ -5,6 +5,7 @@ import com.example.jparestapipractice.domain.Flight;
 import com.example.jparestapipractice.domain.Reservation;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,8 @@ public class FlightEditRequest {
 
     private String flightNumber; // 항공편 번호
     private String airline; // 항공사
-    private LocalDateTime departureTime; // 출발 시간
-    private LocalDateTime arrivalTime; // 도착 시간
+    private LocalDate departureTime; // 출발 시간
+    private LocalDate arrivalTime; // 도착 시간
     private Long departureAirportId; // 출발 공항
     private Long arrivalAirportId; // 도착 공항
 

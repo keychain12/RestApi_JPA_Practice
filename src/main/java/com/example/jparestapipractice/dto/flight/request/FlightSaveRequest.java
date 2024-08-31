@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,9 +17,9 @@ public class FlightSaveRequest {
     @NotBlank
     private String airline; // 항공사
     @NotNull
-    private LocalDateTime departureTime; // 출발 시간
+    private LocalDate departureTime; // 출발 시간
     @NotNull
-    private LocalDateTime arrivalTime; // 도착 시간
+    private LocalDate arrivalTime; // 도착 시간
 
     @NotNull
     private Long departureAirportId; //출발 공항 Id

@@ -8,9 +8,12 @@ import com.example.jparestapipractice.repository.AirportRepository;
 import com.example.jparestapipractice.repository.FlightRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,8 +25,8 @@ public class FlightService {
     private final AirportRepository airportRepository;
 
     @Transactional(readOnly = true)
-    public List<Flight> getAllFlights() { // 모든 항공편 조회
-        return flightRepository.findAll();
+    public Page<Flight> getAllFlights(Pageable pageable) { // 모든 항공편 조회
+        return flightRepository.findAll(pageable);
     }
     @Transactional(readOnly = true)
     public Flight findById(Long flightId) { // 항공편 단일 조회
@@ -64,5 +67,10 @@ public class FlightService {
     public void remove(Long flightId) {
         Flight flight = flightRepository.findById(flightId).orElseThrow(() -> new EntityNotFoundException("없"));
         flightRepository.delete(flight);
+    }
+
+    public List<Flight> searchFlights(String departureAirportCode, String arrivalAirportCode, LocalDate departureDate, LocalDate arrivalDate,String travelClass) {
+
+        return flightRepository.searchFlights(departureAirportCode, arrivalAirportCode, departureDate, arrivalDate, travelClass);
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class Airport { // 공항 엔티티
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "airport_id")
     private Long id;
 

@@ -12,7 +12,6 @@ public class UserResponse {
 
     private Long id;
     private String username;
-    private String password;
     private String email;
     private String tel;
     private String city;
@@ -23,7 +22,6 @@ public class UserResponse {
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
-                .password(user.getPassword())
                 .email(user.getEmail())
                 .tel(user.getTel())
                 .city(user.getAddress().getCity())

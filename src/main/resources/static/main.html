@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>항공권 검색</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .header {
+            background-color: #003580;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .login-button {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #0071eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .login-button:hover {
+            background-color: #005bb5;
+        }
+
+        .search-container {
+            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .search-form .field {
+            flex: 1 1 calc(50% - 10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-form .field label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .search-form .field input, .search-form .field select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .search-form .full-width {
+            flex: 1 1 100%;
+        }
+
+        .search-form .field input[type="date"] {
+            padding-right: 10px;
+        }
+
+        .search-button {
+            text-align: right;
+        }
+
+        .search-button button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0071eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-button button:hover {
+            background-color: #005bb5;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #003580;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>항공권 검색</h1>
+    <button class="login-button" onclick="location.href='/login.html'">로그인</button>
+</div>
+
+<div class="search-container">
+    <form class="search-form" id="flight-search-form">
+        <div class="field">
+            <label for="departureAirportCode">출발지</label>
+            <input type="text" id="departureAirportCode" name="departureAirportCode" placeholder="인천국제공항 (ICN)" required>
+        </div>
+        <div class="field">
+            <label for="arrivalAirportCode">도착지</label>
+            <input type="text" id="arrivalAirportCode" name="arrivalAirportCode" placeholder="나리타국제공항 (NRT)" required>
+        </div>
+        <div class="field">
+            <label for="departureDate">가는 편 날짜</label>
+            <input type="date" id="departureDate" name="departureDate" required>
+        </div>
+        <div class="field">
+            <label for="arrivalDate">오는 편 날짜</label>
+            <input type="date" id="arrivalDate" name="arrivalDate" required>
+        </div>
+        <div class="field full-width">
+            <label for="travelClass">좌석 등급</label>
+            <select id="travelClass" name="travelClass" required>
+                <option value="Economy">일반석</option>
+                <option value="Business">비즈니스석</option>
+                <option value="First">일등석</option>
+            </select>
+        </div>
+        <div class="field full-width search-button">
+            <button type="submit">검색하기</button>
+        </div>
+    </form>
+</div>
+
+<div class="footer">
+    &copy; 2024 YourTravelSite. 모든 권리 보유.
+</div>
+
+<script>
+    document.getElementById('flight-search-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const departureAirportCode = document.getElementById('departureAirportCode').value;
+        const arrivalAirportCode = document.getElementById('arrivalAirportCode').value;
+        const departureDate = document.getElementById('departureDate').value;
+        const arrivalDate = document.getElementById('arrivalDate').value;
+        const travelClass = document.getElementById('travelClass').value;
+
+        const queryParams = `departureAirportCode=${departureAirportCode}&arrivalAirportCode=${arrivalAirportCode}&departureDate=${departureDate}&arrivalDate=${arrivalDate}&travelClass=${travelClass}`;
+        // &travelClass=${travelClass}
+        // 검색 결과 페이지로 이동
+        window.location.href = `/search.html?${queryParams}`;
+    });
+</script>
+</body>
+</html>

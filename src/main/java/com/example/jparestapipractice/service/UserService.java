@@ -1,10 +1,14 @@
 package com.example.jparestapipractice.service;
 
+import com.example.jparestapipractice.domain.Reservation;
 import com.example.jparestapipractice.domain.User;
+import com.example.jparestapipractice.repository.ReservationRepository;
 import com.example.jparestapipractice.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +19,11 @@ import java.util.List;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
     @Transactional(readOnly = true)
-    public List<User> findAllUsers() {
+    public Page<User> findAllUsers(Pageable pageable) {
 
-        return userRepository.findAll();
+        return userRepository.findAll(pageable);
     }
     @Transactional(readOnly = true)
     public User findUserById(Long userId) {
@@ -46,5 +51,9 @@ public class UserService {
     public void remove(Long userId) {
         User user = findUserById(userId);
         userRepository.delete(user);
+    }
+
+    public Page<Reservation> findReservationsByUserId(Long userId,Pageable pageable) {
+        return reservationRepository.findByUserId(userId,pageable);
     }
 }

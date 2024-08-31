@@ -4,96 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User List</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .pagination button:hover {
+            background-color: #45a049;
+        }
+        .pagination button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
-
-    h1 {
-        text-align: center;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        background-color: #fff;
-    }
-
-    th, td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    tr:hover {
-        background-color: #f5f5f5;
-    }
-
-</style>
 <body>
 <h1>User List</h1>
-<table id="user-table">
+<table>
     <thead>
     <tr>
+        <th>ID</th>
         <th>Username</th>
         <th>Email</th>
-        <th>Telephone</th>
+        <th>Tel</th>
         <th>City</th>
         <th>Country</th>
     </tr>
     </thead>
-    <tbody>
-    <!-- Users will be populated here by JavaScript -->
+    <tbody id="userTableBody">
+    <!-- User rows will be inserted here by JavaScript -->
     </tbody>
 </table>
-<script src="scripts.js"></script>
-</body>
+
+<div class="pagination">
+    <button id="prevPage" disabled>Previous</button>
+    <span id="pageInfo"></span>
+    <button id="nextPage">Next</button>
+</div>
+
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        fetchUsers();
+    let currentPage = 0;
+    const size = 10; // Number of users per page
+
+    function loadUsers(page) {
+        fetch(`http://localhost:8080/api/users?page=${page}&size=${size}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('userTableBody');
+                tableBody.innerHTML = ''; // Clear previous data
+
+                data.content.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td>${user.email}</td>
+                            <td>${user.tel}</td>
+                            <td>${user.city}</td>
+                            <td>${user.country}</td>
+                        `;
+                    tableBody.appendChild(row);
+                });
+
+                currentPage = data.number;
+                document.getElementById('pageInfo').innerText = `Page ${data.number + 1} of ${data.totalPages}`;
+
+                document.getElementById('prevPage').disabled = data.first;
+                document.getElementById('nextPage').disabled = data.last;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    document.getElementById('prevPage').addEventListener('click', () => {
+        if (currentPage > 0) {
+            loadUsers(currentPage - 1);
+        }
     });
 
-    function fetchUsers() {
-        fetch('/api/users/')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(users => populateUserTable(users))
-            .catch(error => console.error('Error fetching users:', error));
-    }
+    document.getElementById('nextPage').addEventListener('click', () => {
+        loadUsers(currentPage + 1);
+    });
 
-    function populateUserTable(users) {
-        const userTableBody = document.getElementById('user-table').querySelector('tbody');
-        userTableBody.innerHTML = ''; // Clear the table body
-
-        users.forEach(user => {
-            const row = document.createElement('tr');
-
-            row.innerHTML = `
-            <td>${user.username}</td>
-            <td>${user.email}</td>
-            <td>${user.tel}</td>
-            <td>${user.address.city}</td>
-            <td>${user.address.country}</td>
-        `;
-
-            userTableBody.appendChild(row);
-        });
-    }
-
-
+    // Load the first page of users
+    loadUsers(0);
 </script>
+</body>
 </html>

@@ -17,12 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationController {
     private final ReservationService reservationService;
 
-    @GetMapping("/{reservationId}") //예약 정보 단일 조회
-    public ReservationResponse getReservation(@PathVariable Long reservationId) {
-
-        Reservation reservation = reservationService.getReservation(reservationId);
-        return ReservationResponse.toResponse(reservation);
-    }
 
     @PostMapping("/{userId}/{flightId}") // 예약 및 결제
     public Result<Long> createReservation(@PathVariable Long userId, @PathVariable Long flightId,

@@ -1,13 +1,17 @@
 package com.example.jparestapipractice.controller;
 
 import com.example.jparestapipractice.common.Result;
+import com.example.jparestapipractice.domain.Reservation;
 import com.example.jparestapipractice.domain.User;
+import com.example.jparestapipractice.dto.reservation.response.ReservationResponse;
 import com.example.jparestapipractice.dto.user.request.UserEditRequest;
 import com.example.jparestapipractice.dto.user.request.UserSaveRequest;
 import com.example.jparestapipractice.dto.user.response.UserResponse;
 import com.example.jparestapipractice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +25,17 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping()
-    public List<User> getAllUsers() { // 모든 사용자 목록 api
+    public Page<UserResponse> getAllUsers(Pageable pageable) { // 모든 사용자 목록 api
 
-        return userService.findAllUsers();
+        Page<User> users = userService.findAllUsers(pageable);
+
+        return users.map(UserResponse::toResponse);  // 이건 user -> UserResponse.toResponse(user) 와같다
+    }
+
+    @GetMapping("/{userId}/reservations") // 사용자의 예약정보 api
+    public Page<ReservationResponse> getUserReservations(@PathVariable Long userId,Pageable pageable) {
+        Page<Reservation> reservations = userService.findReservationsByUserId(userId,pageable);
+        return reservations.map(ReservationResponse::toResponse);
     }
 
     @GetMapping("/{userId}")

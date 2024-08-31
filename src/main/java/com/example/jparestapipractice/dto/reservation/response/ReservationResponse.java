@@ -15,15 +15,12 @@ import java.util.Objects;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReservationResponse {
 
-    private Long id;
 
-    private LocalDate reservationDate;
+    private LocalDate reservationDate;  // 예약 날짜
 
-    private String status;
+    private String status;  // 예약 상태
 
-    private UserResponse user;
-
-    private FlightResponse flight;
+    private FlightResponse flight;  // 예약한 항공편
 
 
     public static ReservationResponse toResponse(Reservation reservation) {
@@ -33,10 +30,8 @@ public class ReservationResponse {
                 null : FlightResponse.toResponse(reservation.getFlight());
 
         return ReservationResponse.builder()
-                .id(reservation.getId())
                 .reservationDate(reservation.getReservationDate())
                 .status(reservation.getStatus().name())
-                .user(user)
                 .flight(flight)
                 .build();
 

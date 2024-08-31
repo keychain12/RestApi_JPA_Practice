@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>예약 정보</title>
+</head>
+<style>
+  /* styles.css */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+
+  #userReservations {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  #reservationsContainer {
+    margin-bottom: 20px;
+  }
+
+  .reservation-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .reservation-item:last-child {
+    border-bottom: none;
+  }
+
+  #paginationContainer {
+    text-align: center;
+  }
+
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  #userIdInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+
+</style>
+<body>
+<div id="userReservations">
+  <h1>사용자 예약 정보</h1>
+  <input type="text" id="userIdInput" placeholder="사용자 ID를 입력하세요">
+  <button id="fetchReservationsButton">예약 정보 가져오기</button>
+  <div id="reservationsContainer"></div>
+  <div id="paginationContainer"></div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const baseUrl = 'http://localhost:8080/api/users'; // 실제 API URL로 교체
+    const pageSize = 5;
+
+    document.getElementById('fetchReservationsButton').addEventListener('click', () => {
+      const userId = document.getElementById('userIdInput').value;
+      if (userId) {
+        fetchUserReservations(userId);
+      } else {
+        alert('사용자 ID를 입력하세요.');
+      }
+    });
+
+    function fetchUserReservations(userId, page = 0) {
+      fetch(`${baseUrl}/${userId}/reservations?page=${page}&size=${pageSize}`)
+              .then(response => response.json())
+              .then(data => {
+                displayReservations(data.content);
+                setupPagination(data.totalPages, page, userId);
+              })
+              .catch(error => {
+                console.error('예약 정보를 가져오는 데 실패했습니다.', error);
+              });
+    }
+
+    function displayReservations(reservations) {
+      const container = document.getElementById('reservationsContainer');
+      container.innerHTML = '';
+
+      if (reservations.length === 0) {
+        container.innerHTML = '<p>예약 정보가 없습니다.</p>';
+        return;
+      }
+
+      reservations.forEach(reservation => {
+        const div = document.createElement('div');
+        div.className = 'reservation-item';
+        div.innerHTML = `
+                <h3>예약 날짜: ${reservation.reservationDate}</h3>
+                <p>상태: ${reservation.status}</p>
+                <p>항공편 번호: ${reservation.flight.flightNumber}</p>
+                <p>항공사: ${reservation.flight.airline}</p>
+                <p>출발 공항: ${reservation.flight.departureAirportName}</p>
+                <p>도착 공항: ${reservation.flight.arrivalAirportName}</p>
+            `;
+        container.appendChild(div);
+      });
+    }
+
+    function setupPagination(totalPages, currentPage, userId) {
+      const paginationContainer = document.getElementById('paginationContainer');
+      paginationContainer.innerHTML = '';
+
+      for (let i = 0; i < totalPages; i++) {
+        const button = document.createElement('button');
+        button.innerText = i + 1;
+        button.disabled = i === currentPage;
+        button.onclick = () => fetchUserReservations(userId, i);
+        paginationContainer.appendChild(button);
+      }
+    }
+  });
+
+</script>
+</body>
+</html>

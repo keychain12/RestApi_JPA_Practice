@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    input, button {
+      margin-bottom: 10px;
+      padding: 8px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<h1>Flight Search</h1>
+<form id="searchForm">
+  <label for="departureAirportCode">Departure Airport Code:</label>
+  <input type="text" id="departureAirportCode" name="departureAirportCode" required>
+  <br>
+  <label for="arrivalAirportCode">Arrival Airport Code:</label>
+  <input type="text" id="arrivalAirportCode" name="arrivalAirportCode" required>
+  <br>
+  <label for="departureDate">Departure Date:</label>
+  <input type="date" id="departureDate" name="departureDate" required>
+  <br>
+  <label for="arrivalDate">Arrival Date:</label>
+  <input type="date" id="arrivalDate" name="arrivalDate" required>
+  <br>
+  <button type="submit">Search Flights</button>
+</form>
+
+<h2>Results</h2>
+<table id="resultsTable">
+  <thead>
+  <tr>
+    <th>Flight Number</th>
+    <th>Airline</th>
+    <th>Departure Time</th>
+    <th>Arrival Time</th>
+    <th>Departure Airport</th>
+    <th>Arrival Airport</th>
+  </tr>
+  </thead>
+  <tbody>
+  <!-- Flight results will be injected here -->
+  </tbody>
+</table>
+
+<script>
+  document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const departureAirportCode = document.getElementById('departureAirportCode').value;
+    const arrivalAirportCode = document.getElementById('arrivalAirportCode').value;
+    const departureDate = document.getElementById('departureDate').value;
+    const arrivalDate = document.getElementById('arrivalDate').value;
+
+    fetch(`http://localhost:8080/api/flights/search?departureAirportCode=${departureAirportCode}&arrivalAirportCode=${arrivalAirportCode}&departureDate=${departureDate}&arrivalDate=${arrivalDate}`)
+            .then(response => response.json())
+            .then(data => {
+              const tableBody = document.getElementById('resultsTable').getElementsByTagName('tbody')[0];
+              tableBody.innerHTML = '';
+
+              data.forEach(flight => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = flight.flightNumber;
+                row.insertCell(1).textContent = flight.airline;
+                row.insertCell(2).textContent = flight.departureTime;
+                row.insertCell(3).textContent = flight.arrivalTime;
+                row.insertCell(4).textContent = flight.departureAirportName;
+                row.insertCell(5).textContent = flight.arrivalAirportName;
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching flight data:', error);
+            });
+  });
+</script>
+</body>
+</html>

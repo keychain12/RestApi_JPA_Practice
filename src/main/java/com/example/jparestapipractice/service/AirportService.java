@@ -4,6 +4,8 @@ import com.example.jparestapipractice.domain.Airport;
 import com.example.jparestapipractice.repository.AirportRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +18,10 @@ public class AirportService {
     private final AirportRepository airportRepository;
 
     @Transactional(readOnly = true)
-    public List<Airport> findAll() { // 모든 공항 조회
-        return airportRepository.findAll();
+    public Page<Airport> findAll(Pageable pageable) { // 모든 공항 조회
+        return airportRepository.findAll(pageable);
     }
+
     @Transactional(readOnly = true)
     public Airport getAirportById(Long airportId) { // 단일 공항 조회
         return airportRepository.findById(airportId).orElseThrow(
